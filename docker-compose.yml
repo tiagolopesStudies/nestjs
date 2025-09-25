@@ -1,0 +1,12 @@
+services:
+  postgres:
+    container_name: nest_clean_pg
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
