@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module'
 import { JwtStrategy } from './auth/jwt.strategy'
 import { AuthenticationController } from './controllers/authentication.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
+import { CreateQuestionController } from './controllers/create-question.controller'
 import { envSchema } from './env'
 import { PrismaService } from './prisma/prisma.service'
 
@@ -15,7 +16,11 @@ import { PrismaService } from './prisma/prisma.service'
     }),
     AuthModule
   ],
-  controllers: [CreateAccountController, AuthenticationController],
+  controllers: [
+    CreateAccountController,
+    AuthenticationController,
+    CreateQuestionController
+  ],
   providers: [PrismaService, JwtStrategy]
 })
 export class AppModule {}
