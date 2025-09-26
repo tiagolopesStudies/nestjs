@@ -33,3 +33,10 @@ Authorization: Bearer {{authToken}}
   "title": "My Question Title",
   "content": "This is the content of my question."
 }
+
+###
+
+# @name list_questions
+GET {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

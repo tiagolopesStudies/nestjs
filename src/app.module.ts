@@ -5,6 +5,7 @@ import { JwtStrategy } from './auth/jwt.strategy'
 import { AuthenticationController } from './controllers/authentication.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
 import { CreateQuestionController } from './controllers/create-question.controller'
+import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller'
 import { envSchema } from './env'
 import { PrismaService } from './prisma/prisma.service'
 
@@ -19,7 +20,8 @@ import { PrismaService } from './prisma/prisma.service'
   controllers: [
     CreateAccountController,
     AuthenticationController,
-    CreateQuestionController
+    CreateQuestionController,
+    FetchRecentQuestionsController
   ],
   providers: [PrismaService, JwtStrategy]
 })
