@@ -1,9 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import { z } from 'zod'
+import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import type { UserPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 const createQuestionBodySchema = z.object({
@@ -17,7 +17,7 @@ const zodValidationPipe = new ZodValidationPipe(createQuestionBodySchema)
 @Controller('/questions')
 @UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private createQuestion: CreateQuestionUseCase) {}
 
   @Post()
   async handle(
@@ -27,24 +27,19 @@ export class CreateQuestionController {
     const { title, content } = body
     const userId = user.sub
 
-    await this.prisma.question.create({
-      data: {
-        title,
-        content,
-        authorId: userId,
-        slug: this.convertToSlug(title)
-      }
+    const result = await this.createQuestion.execute({
+      instructorId: userId,
+      title,
+      content,
+      attachmentsIds: []
     })
 
-    return { message: 'Question created successfully' }
-  }
+    if (result.isLeft()) {
+      return { message: 'Error creating question' }
+    }
 
-  private convertToSlug(title: string) {
-    return title
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
+    return {
+      message: 'Question created successfully'
+    }
   }
 }
