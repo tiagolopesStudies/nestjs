@@ -1,8 +1,8 @@
 import { makeInMemoryQuestionRepository } from 'test/factories/make-in-memory-question-repository'
+import { makeQuestion } from 'test/factories/make-question'
 import { Slug } from '../../enterprise/entities/value-objects/slug'
 import { QuestionRepository } from '../repositories/question-repository'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
-import { makeQuestion } from 'test/factories/make-question'
 
 let inMemoryQuestionRepository: QuestionRepository
 
