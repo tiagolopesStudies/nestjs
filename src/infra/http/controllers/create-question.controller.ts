@@ -27,16 +27,12 @@ export class CreateQuestionController {
     const { title, content } = body
     const userId = user.sub
 
-    const result = await this.createQuestion.execute({
+    await this.createQuestion.execute({
       instructorId: userId,
       title,
       content,
       attachmentsIds: []
     })
-
-    if (result.isLeft()) {
-      return { message: 'Error creating question' }
-    }
 
     return {
       message: 'Question created successfully'

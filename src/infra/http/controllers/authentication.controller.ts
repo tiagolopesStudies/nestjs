@@ -32,7 +32,9 @@ export class AuthenticationController {
     })
 
     if (result.isLeft()) {
-      throw new UnauthorizedException(result.value.message)
+      const error = result.value
+
+      throw new UnauthorizedException(error.message)
     }
 
     const { accessToken } = result.value
