@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
+import { Public } from '@/infra/auth/public'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 const authenticationBodySchema = z.object({
@@ -23,6 +24,7 @@ export class AuthenticationController {
     private readonly authenticateStudent: AuthenticateStudentUseCase
   ) {}
 
+  @Public()
   @Post()
   async handle(@Body() body: AuthenticationBody) {
     const { email, password } = body
