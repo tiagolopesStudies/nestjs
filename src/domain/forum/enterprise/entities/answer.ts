@@ -1,8 +1,8 @@
-import { Optional } from '@/core/types/optional'
-import { UniqueEntityId } from './value-objects/unique-entity-id'
-import { AnswerAttachmentList } from './answer-attachment-list'
 import { AggregateRoot } from '@/core/entities/aggregate-root'
+import { Optional } from '@/core/types/optional'
 import { AnswerCreatedEvent } from '../events/answer-created-events'
+import { AnswerAttachmentList } from './answer-attachment-list'
+import { UniqueEntityId } from './value-objects/unique-entity-id'
 
 interface AnswerProps {
   authorId: UniqueEntityId
@@ -10,7 +10,7 @@ interface AnswerProps {
   attachments: AnswerAttachmentList
   content: string
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Answer extends AggregateRoot<AnswerProps> {
