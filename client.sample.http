@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
+@slug = my-question-title
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -38,5 +39,12 @@ Authorization: Bearer {{authToken}}
 
 # @name list_questions
 GET {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name get_question_by_slug
+GET {{baseUrl}}/questions/{{slug}}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

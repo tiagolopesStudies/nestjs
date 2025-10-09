@@ -5,7 +5,7 @@ import request from 'supertest'
 import { AppModule } from '@/infra/app.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
-describe('Fetch questions (e2e)', () => {
+describe('Get question by slug (e2e)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -22,7 +22,7 @@ describe('Fetch questions (e2e)', () => {
     await app.init()
   })
 
-  test('GET /questions', async () => {
+  test('GET /questions/:slug', async () => {
     const user = await prisma.user.create({
       data: {
         name: 'John Doe',
@@ -43,14 +43,13 @@ describe('Fetch questions (e2e)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .get('/questions')
+      .get('/questions/new-question')
       .set({
         Authorization: `Bearer ${accessToken}`
       })
 
     expect(response.status).toBe(200)
-    expect(response.body.questions).toHaveLength(1)
-    expect(response.body.questions[0]).toEqual(
+    expect(response.body.question).toEqual(
       expect.objectContaining({
         title: 'New question',
         content: 'Question content',
