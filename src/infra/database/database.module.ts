@@ -3,7 +3,6 @@ import { QuestionRepository } from '@/domain/forum/application/repositories/ques
 import { StudentRepository } from '@/domain/forum/application/repositories/student-repository'
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaAnswerRepository } from './prisma/repositories/prisma-answer-repository'
-import { PrismaNotificationsRepository } from './prisma/repositories/prisma-notifications-repository'
 import { PrismaQuestionAttachmentRepository } from './prisma/repositories/prisma-question-attachment-repository'
 import { PrismaQuestionCommentRepository } from './prisma/repositories/prisma-question-comment-repository'
 import { PrismaQuestionRepository } from './prisma/repositories/prisma-question-repository'
@@ -22,15 +21,13 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
     },
     PrismaQuestionCommentRepository,
     PrismaQuestionAttachmentRepository,
-    PrismaAnswerRepository,
-    PrismaNotificationsRepository
+    PrismaAnswerRepository
   ],
   exports: [
     PrismaService,
     QuestionRepository,
     StudentRepository,
     PrismaAnswerRepository,
-    PrismaNotificationsRepository,
     PrismaQuestionCommentRepository,
     PrismaQuestionAttachmentRepository
   ]

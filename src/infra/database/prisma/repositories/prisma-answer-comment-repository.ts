@@ -2,22 +2,54 @@ import { Injectable } from '@nestjs/common'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { AnswerCommentRepository } from '@/domain/forum/application/repositories/answer-comment-repository'
 import { AnswerComment } from '@/domain/forum/enterprise/entities/answer-comment'
+import { PrismaAnswerCommentMapper } from '../mappers/prisma-answer-comment-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaAnswerCommentRepository implements AnswerCommentRepository {
-  create(comment: AnswerComment): Promise<void> {
-    throw new Error('Method not implemented.')
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(comment: AnswerComment): Promise<void> {
+    await this.prismaService.comment.create({
+      data: PrismaAnswerCommentMapper.toPrisma(comment)
+    })
   }
-  findById(commentId: string): Promise<AnswerComment | null> {
-    throw new Error('Method not implemented.')
+  async findById(commentId: string): Promise<AnswerComment | null> {
+    const comment = await this.prismaService.comment.findUnique({
+      where: {
+        id: commentId
+      }
+    })
+
+    if (!comment) {
+      return null
+    }
+
+    return PrismaAnswerCommentMapper.toDomain(comment)
   }
-  findManyByAnswerId(
+  async findManyByAnswerId(
     answerId: string,
     params: PaginationParams
   ): Promise<AnswerComment[]> {
-    throw new Error('Method not implemented.')
+    const comments = await this.prismaService.comment.findMany({
+      where: {
+        answerId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 20,
+      skip: (params.page - 1) * 20
+    })
+
+    return comments.map(PrismaAnswerCommentMapper.toDomain)
   }
-  delete(comment: AnswerComment): Promise<void> {
-    throw new Error('Method not implemented.')
+
+  async delete(comment: AnswerComment): Promise<void> {
+    await this.prismaService.comment.delete({
+      where: {
+        id: comment.id.toString()
+      }
+    })
   }
 }
