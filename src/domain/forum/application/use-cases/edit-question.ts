@@ -1,13 +1,14 @@
-import { Question } from '@/domain/forum/enterprise/entities/question'
-import { QuestionAttachmentRepository } from '../repositories/question-attachment-repository'
-import { QuestionRepository } from '../repositories/question-repository'
+import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { UseCaseError } from '@/core/errors/use-case-error'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
+import { Question } from '@/domain/forum/enterprise/entities/question'
 import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
-import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
 import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
+import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
+import { QuestionAttachmentRepository } from '../repositories/question-attachment-repository'
+import { QuestionRepository } from '../repositories/question-repository'
 
 interface EditQuestionUseCaseRequest {
   questionId: string
@@ -19,6 +20,7 @@ interface EditQuestionUseCaseRequest {
 
 type EditQuestionUseCaseResponse = Either<UseCaseError, { question: Question }>
 
+@Injectable()
 export class EditQuestionUseCase {
   constructor(
     private questionRepository: QuestionRepository,
