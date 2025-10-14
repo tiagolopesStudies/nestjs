@@ -1,10 +1,11 @@
+import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { UseCaseError } from '@/core/errors/use-case-error'
-import { Question } from '../../enterprise/entities/question'
+import { Question } from '@/domain/forum/enterprise/entities/question'
 import { AnswerRepository } from '../repositories/answer-repository'
 import { QuestionRepository } from '../repositories/question-repository'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
-import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
 
 interface ChooseBestAnswerUseCaseRequest {
   answerId: string
@@ -16,6 +17,7 @@ type ChooseBestAnswerUseCaseResponse = Either<
   { question: Question }
 >
 
+@Injectable()
 export class ChooseBestAnswerUseCase {
   constructor(
     private questionRepository: QuestionRepository,

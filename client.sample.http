@@ -105,3 +105,10 @@ Authorization: Bearer {{authToken}}
 DELETE  {{baseUrl}}/answers/{{answerId}}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name choose_best_answer
+PATCH {{baseUrl}}/answers/{{answerId}}/choose-as-best
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
