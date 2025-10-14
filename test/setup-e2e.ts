@@ -22,10 +22,28 @@ beforeAll(async () => {
   const databaseUrl = generateUniqueDatabaseUrl(schemaId)
   process.env.DATABASE_URL = databaseUrl
 
-  execSync('pnpm prisma migrate deploy')
+  try {
+    execSync('pnpm prisma migrate deploy', {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        DATABASE_URL: databaseUrl
+      }
+    })
+  } catch (error) {
+    console.error('Erro ao executar migrações:', error)
+    throw error
+  }
 })
 
 afterAll(async () => {
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
-  await prisma.$disconnect()
+  try {
+    await prisma.$executeRawUnsafe(
+      `DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`
+    )
+  } catch (error) {
+    console.error('Erro ao limpar schema de teste:', error)
+  } finally {
+    await prisma.$disconnect()
+  }
 })
