@@ -50,6 +50,8 @@ GET {{baseUrl}}/questions/{{slug}}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
+###
+
 # @name edit_question
 PUT {{baseUrl}}/questions/{{questionId}}
 Content-Type: application/json
@@ -59,3 +61,10 @@ Authorization: Bearer {{authToken}}
   "title": "Question Edited",
   "content": "This is the edited content of my question."
 }
+
+###
+
+# @name delete_question
+DELETE {{baseUrl}}/questions/{{questionId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

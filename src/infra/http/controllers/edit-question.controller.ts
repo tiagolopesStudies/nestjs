@@ -21,9 +21,15 @@ const editQuestionBodySchema = z.object({
   content: z.string().min(10).max(1000)
 })
 
+const editQuestionParamSchema = z.object({
+  id: z.uuid()
+})
+
 type EditQuestionBodySchema = z.infer<typeof editQuestionBodySchema>
+type EditQuestionParamSchema = z.infer<typeof editQuestionParamSchema>
 
 const bodyValidationPipe = new ZodValidationPipe(editQuestionBodySchema)
+const paramValidationPipe = new ZodValidationPipe(editQuestionParamSchema)
 
 @Controller('/questions/:id')
 export class EditQuestionController {
@@ -34,7 +40,7 @@ export class EditQuestionController {
   async handle(
     @Body(bodyValidationPipe) body: EditQuestionBodySchema,
     @CurrentUser() user: UserPayload,
-    @Param('id') questionId: string
+    @Param(paramValidationPipe) { id: questionId }: EditQuestionParamSchema
   ) {
     const { title, content } = body
 
