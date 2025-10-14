@@ -2,7 +2,7 @@
 @authToken = {{authenticate.response.body.access_token}}
 @slug = my-question-title
 @questionId = {{list_questions.response.body.questions[0].id}}
-@answerId = 0b18be3b-dee3-42f7-862e-c8c1db1acf71
+@answerId = {{list_answers.response.body.answers[0].id}}
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -80,6 +80,13 @@ Authorization: Bearer {{authToken}}
 {
   "content": "This is an answer to the question."
 }
+
+###
+
+# @name list_answers
+GET {{baseUrl}}/questions/{{questionId}}/answers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 ###
 

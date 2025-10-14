@@ -39,6 +39,10 @@ export class Answer extends AggregateRoot<AnswerProps> {
     return this.props.createdAt
   }
 
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
   set content(content: string) {
     this.props.content = content
     this.touch()
