@@ -68,3 +68,14 @@ Authorization: Bearer {{authToken}}
 DELETE {{baseUrl}}/questions/{{questionId}}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name answer_question
+POST {{baseUrl}}/questions/{{questionId}}/answers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "This is an answer to the question."
+}

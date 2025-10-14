@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { AnswerRepository } from '@/domain/forum/application/repositories/answer-repository'
 import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
 import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
 import { StudentRepository } from '@/domain/forum/application/repositories/student-repository'
@@ -24,16 +25,19 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
       provide: QuestionAttachmentRepository,
       useClass: PrismaQuestionAttachmentRepository
     },
+    {
+      provide: AnswerRepository,
+      useClass: PrismaAnswerRepository
+    },
     PrismaQuestionCommentRepository,
-    PrismaQuestionAttachmentRepository,
-    PrismaAnswerRepository
+    PrismaQuestionAttachmentRepository
   ],
   exports: [
     PrismaService,
     QuestionRepository,
     StudentRepository,
     QuestionAttachmentRepository,
-    PrismaAnswerRepository,
+    AnswerRepository,
     PrismaQuestionCommentRepository,
     PrismaQuestionAttachmentRepository
   ]
