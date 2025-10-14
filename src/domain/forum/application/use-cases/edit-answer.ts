@@ -1,9 +1,10 @@
+import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
-import { Answer } from '../../enterprise/entities/answer'
-import { AnswerRepository } from '../repositories/answer-repository'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { UseCaseError } from '@/core/errors/use-case-error'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
-import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { Answer } from '@/domain/forum/enterprise/entities/answer'
+import { AnswerRepository } from '../repositories/answer-repository'
 
 interface EditAnswerUseCaseRequest {
   answerId: string
@@ -13,6 +14,7 @@ interface EditAnswerUseCaseRequest {
 
 type EditAnswerUseCaseResponse = Either<UseCaseError, { answer: Answer }>
 
+@Injectable()
 export class EditAnswerUseCase {
   constructor(private answerRepository: AnswerRepository) {}
   async execute({
