@@ -2,6 +2,7 @@
 @authToken = {{authenticate.response.body.access_token}}
 @slug = my-question-title
 @questionId = {{list_questions.response.body.questions[0].id}}
+@answerId = 0b18be3b-dee3-42f7-862e-c8c1db1acf71
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -79,3 +80,21 @@ Authorization: Bearer {{authToken}}
 {
   "content": "This is an answer to the question."
 }
+
+###
+
+# @name edit_answer
+PUT {{baseUrl}}/answers/{{answerId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "This is an edited answer to the question."
+}
+
+###
+
+# @name delete_answer
+DELETE  {{baseUrl}}/answers/{{answerId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
