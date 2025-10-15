@@ -3,6 +3,8 @@
 @slug = my-question-title
 @questionId = {{list_questions.response.body.questions[0].id}}
 @answerId = {{list_answers.response.body.answers[0].id}}
+@questionCommentId = {{list_question_comments.response.body.comments[0].id}}
+@answerCommentId = {{list_answer_comments.response.body.comments[0].id}}
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -123,3 +125,42 @@ Authorization: Bearer {{authToken}}
 {
   "content": "This is a comment on the question."
 }
+
+###
+
+# @name list_question_comments
+GET {{baseUrl}}/questions/{{questionId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_question_comment
+DELETE {{baseUrl}}/questions/comments/{{questionCommentId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name comment_on_answer
+POST {{baseUrl}}/answers/{{answerId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "This is a comment on the answer."
+}
+
+###
+
+# @name list_answer_comments
+GET {{baseUrl}}/answers/{{answerId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_answer_comment
+DELETE {{baseUrl}}/answers/comments/{{answerCommentId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

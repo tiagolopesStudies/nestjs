@@ -1,9 +1,10 @@
+import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
-import { QuestionComment } from '../../enterprise/entities/question-comment'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { UseCaseError } from '@/core/errors/use-case-error'
+import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment'
 import { QuestionCommentRepository } from '../repositories/question-comment-repository'
 import { QuestionRepository } from '../repositories/question-repository'
-import { UseCaseError } from '@/core/errors/use-case-error'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
 
 interface FetchQuestionCommentsUseCaseRequest {
   questionId: string
@@ -15,6 +16,7 @@ type FetchQuestionCommentsUseCaseResponse = Either<
   { questionComments: QuestionComment[] }
 >
 
+@Injectable()
 export class FetchQuestionCommentsUseCase {
   constructor(
     private questionRepository: QuestionRepository,
