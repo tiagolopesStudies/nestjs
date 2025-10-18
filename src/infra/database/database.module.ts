@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { AnswerCommentRepository } from '@/domain/forum/application/repositories/answer-comment-repository'
 import { AnswerRepository } from '@/domain/forum/application/repositories/answer-repository'
+import { AttachmentRepository } from '@/domain/forum/application/repositories/attachment-repository'
 import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
 import { QuestionCommentRepository } from '@/domain/forum/application/repositories/question-comment-repository'
 import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
@@ -8,6 +9,7 @@ import { StudentRepository } from '@/domain/forum/application/repositories/stude
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaAnswerCommentRepository } from './prisma/repositories/prisma-answer-comment-repository'
 import { PrismaAnswerRepository } from './prisma/repositories/prisma-answer-repository'
+import { PrismaAttachmentRepository } from './prisma/repositories/prisma-attachment-repository'
 import { PrismaQuestionAttachmentRepository } from './prisma/repositories/prisma-question-attachment-repository'
 import { PrismaQuestionCommentRepository } from './prisma/repositories/prisma-question-comment-repository'
 import { PrismaQuestionRepository } from './prisma/repositories/prisma-question-repository'
@@ -40,6 +42,10 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
       provide: AnswerCommentRepository,
       useClass: PrismaAnswerCommentRepository
     },
+    {
+      provide: AttachmentRepository,
+      useClass: PrismaAttachmentRepository
+    },
     PrismaQuestionAttachmentRepository
   ],
   exports: [
@@ -50,6 +56,7 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
     AnswerRepository,
     QuestionCommentRepository,
     AnswerCommentRepository,
+    AttachmentRepository,
     PrismaQuestionAttachmentRepository
   ]
 })
