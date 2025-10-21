@@ -18,7 +18,8 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const editQuestionBodySchema = z.object({
   title: z.string().min(5).max(100),
-  content: z.string().min(10).max(1000)
+  content: z.string().min(10).max(1000),
+  attachments: z.array(z.uuid())
 })
 
 const editQuestionParamSchema = z.object({
@@ -42,13 +43,13 @@ export class EditQuestionController {
     @CurrentUser() user: UserPayload,
     @Param(paramValidationPipe) { id: questionId }: EditQuestionParamSchema
   ) {
-    const { title, content } = body
+    const { title, content, attachments } = body
 
     const result = await this.editQuestion.execute({
       authorId: user.sub,
       title,
       content,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
       questionId
     })
 
