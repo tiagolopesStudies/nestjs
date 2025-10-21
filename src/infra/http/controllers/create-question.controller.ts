@@ -7,7 +7,8 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 const createQuestionBodySchema = z.object({
   title: z.string().min(5).max(100),
-  content: z.string().min(10).max(1000)
+  content: z.string().min(10).max(1000),
+  attachments: z.array(z.uuid())
 })
 
 type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>
@@ -22,14 +23,14 @@ export class CreateQuestionController {
     @Body(zodValidationPipe) body: CreateQuestionBodySchema,
     @CurrentUser() user: UserPayload
   ) {
-    const { title, content } = body
+    const { title, content, attachments } = body
     const userId = user.sub
 
     await this.createQuestion.execute({
       instructorId: userId,
       title,
       content,
-      attachmentsIds: []
+      attachmentsIds: attachments
     })
 
     return {

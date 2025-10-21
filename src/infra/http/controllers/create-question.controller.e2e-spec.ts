@@ -32,7 +32,8 @@ describe('Create question (e2e)', () => {
       .post('/questions')
       .send({
         title: 'New question',
-        content: 'Question content'
+        content: 'Question content',
+        attachments: []
       })
       .set({
         Authorization: `Bearer ${accessToken}`

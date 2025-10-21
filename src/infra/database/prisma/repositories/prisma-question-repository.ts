@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PaginationParams } from '@/core/repositories/pagination-params'
+import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
 import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
 import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
@@ -7,7 +8,10 @@ import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaQuestionRepository implements QuestionRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly questionAttachmentRepository: QuestionAttachmentRepository
+  ) {}
 
   async create(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
@@ -15,17 +19,31 @@ export class PrismaQuestionRepository implements QuestionRepository {
     await this.prisma.question.create({
       data
     })
+
+    await this.questionAttachmentRepository.createMany(
+      question.attachments.getItems()
+    )
   }
+
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
 
-    await this.prisma.question.update({
-      where: {
-        id: question.id.toString()
-      },
-      data
-    })
+    await Promise.all([
+      this.prisma.question.update({
+        where: {
+          id: question.id.toString()
+        },
+        data
+      }),
+      this.questionAttachmentRepository.createMany(
+        question.attachments.getNewItems()
+      ),
+      this.questionAttachmentRepository.deleteMany(
+        question.attachments.getRemovedItems()
+      )
+    ])
   }
+
   async findBySlug(slug: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
       where: {
@@ -39,6 +57,7 @@ export class PrismaQuestionRepository implements QuestionRepository {
 
     return PrismaQuestionMapper.toDomain(question)
   }
+
   async findById(questionId: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
       where: {
@@ -52,6 +71,7 @@ export class PrismaQuestionRepository implements QuestionRepository {
 
     return PrismaQuestionMapper.toDomain(question)
   }
+
   async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
     const perPage = 20
 
@@ -65,6 +85,7 @@ export class PrismaQuestionRepository implements QuestionRepository {
 
     return questions.map(PrismaQuestionMapper.toDomain)
   }
+
   async delete(question: Question): Promise<void> {
     await this.prisma.question.delete({
       where: {
