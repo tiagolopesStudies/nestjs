@@ -4,7 +4,7 @@ import { AnswerCreatedEvent } from '../events/answer-created-events'
 import { AnswerAttachmentList } from './answer-attachment-list'
 import { UniqueEntityId } from './value-objects/unique-entity-id'
 
-interface AnswerProps {
+export interface AnswerProps {
   authorId: UniqueEntityId
   questionId: UniqueEntityId
   attachments: AnswerAttachmentList

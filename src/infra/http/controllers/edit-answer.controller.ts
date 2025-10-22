@@ -17,7 +17,8 @@ import type { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const editAnswerBodySchema = z.object({
-  content: z.string().min(1)
+  content: z.string().min(1),
+  attachments: z.array(z.uuid()).default([])
 })
 
 const editAnswerParamsSchema = z.object({
@@ -42,13 +43,14 @@ export class EditAnswerController {
     @CurrentUser() user: UserPayload
   ) {
     const { answerId } = params
-    const { content } = body
+    const { content, attachments } = body
     const authorId = user.sub
 
     const result = await this.editAnswer.execute({
       answerId,
       authorId,
-      content
+      content,
+      attachmentsIds: attachments
     })
 
     if (result.isLeft()) {

@@ -19,7 +19,7 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 const editQuestionBodySchema = z.object({
   title: z.string().min(5).max(100),
   content: z.string().min(10).max(1000),
-  attachments: z.array(z.uuid())
+  attachments: z.array(z.uuid()).default([])
 })
 
 const editQuestionParamSchema = z.object({

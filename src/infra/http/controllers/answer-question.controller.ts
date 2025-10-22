@@ -7,7 +7,8 @@ import type { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const answerQuestionBodySchema = z.object({
-  content: z.string().min(1)
+  content: z.string().min(1),
+  attachments: z.array(z.uuid()).default([])
 })
 
 const answerQuestionParamsSchema = z.object({
@@ -30,7 +31,7 @@ export class AnswerQuestionController {
     @Param(paramsValidationPipe) params: AnswerQuestionParamsSchema,
     @CurrentUser() user: UserPayload
   ) {
-    const { content } = body
+    const { content, attachments } = body
     const { questionId } = params
     const authorId = user.sub
 
@@ -38,7 +39,7 @@ export class AnswerQuestionController {
       authorId: new UniqueEntityId(authorId),
       questionId: new UniqueEntityId(questionId),
       content: content,
-      attachmentIds: []
+      attachmentIds: attachments
     })
 
     return {

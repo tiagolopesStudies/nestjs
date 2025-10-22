@@ -13,7 +13,7 @@ describe('Answer question', () => {
   it('should be able to answer a question', async () => {
     const sut = new AnswerQuestionUseCase(inMemoryAnswerRepository)
     const result = await sut.execute({
-      instructorId: new UniqueEntityId('1'),
+      authorId: new UniqueEntityId('1'),
       questionId: new UniqueEntityId('1'),
       content: 'content',
       attachmentIds: ['1', '2']
