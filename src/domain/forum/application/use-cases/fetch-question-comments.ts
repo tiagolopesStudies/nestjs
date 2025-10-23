@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { UseCaseError } from '@/core/errors/use-case-error'
-import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment'
+import { CommentWithAuthor } from '../../enterprise/entities/value-objects/comment-with-author'
 import { QuestionCommentRepository } from '../repositories/question-comment-repository'
 import { QuestionRepository } from '../repositories/question-repository'
 
@@ -13,7 +13,7 @@ interface FetchQuestionCommentsUseCaseRequest {
 
 type FetchQuestionCommentsUseCaseResponse = Either<
   UseCaseError,
-  { questionComments: QuestionComment[] }
+  { questionComments: CommentWithAuthor[] }
 >
 
 @Injectable()
@@ -34,9 +34,12 @@ export class FetchQuestionCommentsUseCase {
     }
 
     const questionComments =
-      await this.questionCommentsRepository.findManyByQuestionId(questionId, {
-        page
-      })
+      await this.questionCommentsRepository.findManyWithAuthorByQuestionId(
+        questionId,
+        {
+          page
+        }
+      )
 
     return right({ questionComments })
   }

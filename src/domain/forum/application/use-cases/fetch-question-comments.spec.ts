@@ -1,19 +1,27 @@
-import { makeInMemoryQuestionRepository } from 'test/factories/make-in-memory-question-repository'
-import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
 import { makeQuestion } from 'test/factories/make-question'
 import { makeQuestionComment } from 'test/factories/make-question-comment'
-import { QuestionRepository } from '../repositories/question-repository'
+import { makeStudent } from 'test/factories/make-student'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
+import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
+import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
 import { QuestionCommentRepository } from '../repositories/question-comment-repository'
 import { FetchQuestionCommentsUseCase } from './fetch-question-comments'
 
 let sut: FetchQuestionCommentsUseCase
-let questionRepository: QuestionRepository
+let questionRepository: InMemoryQuestionRepository
 let questionCommentsRepository: QuestionCommentRepository
+let studentRepository: InMemoryStudentRepository
 
 describe('Comment on question', () => {
   beforeEach(() => {
-    questionRepository = makeInMemoryQuestionRepository()
-    questionCommentsRepository = new InMemoryQuestionCommentRepository()
+    questionRepository = new InMemoryQuestionRepository(
+      new InMemoryQuestionAttachmentRepository()
+    )
+    studentRepository = new InMemoryStudentRepository()
+    questionCommentsRepository = new InMemoryQuestionCommentRepository(
+      studentRepository
+    )
 
     sut = new FetchQuestionCommentsUseCase(
       questionRepository,
@@ -25,8 +33,12 @@ describe('Comment on question', () => {
     const question = makeQuestion()
     await questionRepository.create(question)
 
+    const student = makeStudent()
+    await studentRepository.create(student)
+
     await questionCommentsRepository.create(
       makeQuestionComment({
+        authorId: student.id,
         questionId: question.id,
         createdAt: new Date('2025-05-01')
       })
@@ -34,6 +46,7 @@ describe('Comment on question', () => {
 
     await questionCommentsRepository.create(
       makeQuestionComment({
+        authorId: student.id,
         questionId: question.id,
         createdAt: new Date('2025-05-10')
       })
@@ -41,6 +54,7 @@ describe('Comment on question', () => {
 
     await questionCommentsRepository.create(
       makeQuestionComment({
+        authorId: student.id,
         questionId: question.id,
         createdAt: new Date('2025-05-06')
       })
@@ -51,7 +65,7 @@ describe('Comment on question', () => {
       page: 1
     })
 
-    if (!result.isRight()) return
+    if (!result.isRight()) throw new Error()
 
     const { questionComments } = result.value
 
@@ -67,9 +81,12 @@ describe('Comment on question', () => {
     const question = makeQuestion()
     await questionRepository.create(question)
 
+    const student = makeStudent()
+    await studentRepository.create(student)
+
     for (let i = 1; i <= 22; i++) {
       await questionCommentsRepository.create(
-        makeQuestionComment({ questionId: question.id })
+        makeQuestionComment({ questionId: question.id, authorId: student.id })
       )
     }
 
@@ -78,7 +95,7 @@ describe('Comment on question', () => {
       page: 2
     })
 
-    if (!result.isRight()) return
+    if (!result.isRight()) throw new Error()
 
     const { questionComments } = result.value
 

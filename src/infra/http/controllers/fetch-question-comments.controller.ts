@@ -8,7 +8,7 @@ import {
 import z from 'zod'
 import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-question-comments'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { QuestionCommentPresenter } from '../presenters/question-comment-presenter'
+import { CommentWithAuthorPresenter } from '../presenters/comment-with-author-presenter'
 
 const questionIdParamSchema = z.uuid()
 const pageQueryParamSchema = z
@@ -50,7 +50,7 @@ export class FetchQuestionCommentsController {
     const { questionComments } = result.value
 
     return {
-      comments: questionComments.map(QuestionCommentPresenter.toHTTP)
+      comments: questionComments.map(CommentWithAuthorPresenter.toHTTP)
     }
   }
 }

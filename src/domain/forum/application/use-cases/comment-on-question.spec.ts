@@ -1,10 +1,11 @@
 import { makeInMemoryQuestionRepository } from 'test/factories/make-in-memory-question-repository'
-import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
-import { QuestionRepository } from '../repositories/question-repository'
-import { QuestionCommentRepository } from '../repositories/question-comment-repository'
-import { CommentOnQuestionUseCase } from './comment-on-question'
 import { makeQuestion } from 'test/factories/make-question'
+import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
 import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
+import { QuestionCommentRepository } from '../repositories/question-comment-repository'
+import { QuestionRepository } from '../repositories/question-repository'
+import { CommentOnQuestionUseCase } from './comment-on-question'
 
 let sut: CommentOnQuestionUseCase
 let questionRepository: QuestionRepository
@@ -13,7 +14,9 @@ let questionCommentsRepository: QuestionCommentRepository
 describe('Comment on question', () => {
   beforeEach(() => {
     questionRepository = makeInMemoryQuestionRepository()
-    questionCommentsRepository = new InMemoryQuestionCommentRepository()
+    questionCommentsRepository = new InMemoryQuestionCommentRepository(
+      new InMemoryStudentRepository()
+    )
 
     sut = new CommentOnQuestionUseCase(
       questionRepository,

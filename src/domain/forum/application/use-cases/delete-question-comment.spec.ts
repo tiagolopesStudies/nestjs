@@ -1,11 +1,11 @@
-import { describe, beforeEach, it, expect } from 'vitest'
-
 import { makeQuestionComment } from 'test/factories/make-question-comment'
 import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
-import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
-import { QuestionCommentRepository } from '../repositories/question-comment-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
 import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
+import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
+import { QuestionCommentRepository } from '../repositories/question-comment-repository'
 import { DeleteQuestionCommentUseCase } from './delete-question-comment'
 
 let sut: DeleteQuestionCommentUseCase
@@ -13,7 +13,9 @@ let questionCommentRepository: QuestionCommentRepository
 
 describe('Delete a comment on question', () => {
   beforeEach(() => {
-    questionCommentRepository = new InMemoryQuestionCommentRepository()
+    questionCommentRepository = new InMemoryQuestionCommentRepository(
+      new InMemoryStudentRepository()
+    )
     sut = new DeleteQuestionCommentUseCase(questionCommentRepository)
   })
 
