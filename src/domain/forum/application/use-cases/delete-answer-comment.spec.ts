@@ -1,19 +1,21 @@
-import { describe, beforeEach, it, expect } from 'vitest'
-
+import { makeAnswerComment } from 'test/factories/make-answer-comment'
+import { InMemoryAnswerCommentRepository } from 'test/repositories/in-memory-answer-comment-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
 import { AnswerCommentRepository } from '../repositories/answer-comment-repository'
 import { DeleteAnswerCommentUseCase } from './delete-answer-comment'
-import { InMemoryAnswerCommentRepository } from 'test/repositories/in-memory-answer-comment-repository'
-import { makeAnswerComment } from 'test/factories/make-answer-comment'
-import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
-import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
 
 let sut: DeleteAnswerCommentUseCase
 let answerCommentRepository: AnswerCommentRepository
 
 describe('Delete a comment on answer', () => {
   beforeEach(() => {
-    answerCommentRepository = new InMemoryAnswerCommentRepository()
+    answerCommentRepository = new InMemoryAnswerCommentRepository(
+      new InMemoryStudentRepository()
+    )
 
     sut = new DeleteAnswerCommentUseCase(answerCommentRepository)
   })

@@ -1,10 +1,11 @@
-import { AnswerRepository } from '../repositories/answer-repository'
-import { AnswerCommentRepository } from '../repositories/answer-comment-repository'
-import { CommentOnAnswerUseCase } from './comment-on-answer'
-import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
-import { InMemoryAnswerCommentRepository } from 'test/repositories/in-memory-answer-comment-repository'
 import { makeAnswer } from 'test/factories/make-answer'
-import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error'
+import { InMemoryAnswerCommentRepository } from 'test/repositories/in-memory-answer-comment-repository'
+import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { AnswerCommentRepository } from '../repositories/answer-comment-repository'
+import { AnswerRepository } from '../repositories/answer-repository'
+import { CommentOnAnswerUseCase } from './comment-on-answer'
 
 let sut: CommentOnAnswerUseCase
 let answerRepository: AnswerRepository
@@ -13,7 +14,9 @@ let answerCommentRepository: AnswerCommentRepository
 describe('Comment on answer', () => {
   beforeEach(() => {
     answerRepository = new InMemoryAnswerRepository()
-    answerCommentRepository = new InMemoryAnswerCommentRepository()
+    answerCommentRepository = new InMemoryAnswerCommentRepository(
+      new InMemoryStudentRepository()
+    )
 
     sut = new CommentOnAnswerUseCase(answerRepository, answerCommentRepository)
   })
