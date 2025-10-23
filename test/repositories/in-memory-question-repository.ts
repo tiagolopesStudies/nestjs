@@ -1,12 +1,17 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParams } from '@/core/repositories/pagination-params'
-import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
 import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
+import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
+import { InMemoryAttachmentRepository } from './in-memory-attachment-repository'
+import { InMemoryQuestionAttachmentRepository } from './in-memory-question-attachment-repository'
+import { InMemoryStudentRepository } from './in-memory-student-repository'
 
 export class InMemoryQuestionRepository implements QuestionRepository {
   constructor(
-    private questionAttachmentRepository: QuestionAttachmentRepository
+    private questionAttachmentRepository: InMemoryQuestionAttachmentRepository,
+    private attachmentRepository: InMemoryAttachmentRepository,
+    private studentRepository: InMemoryStudentRepository
   ) {}
 
   public items: Question[] = []
@@ -47,6 +52,53 @@ export class InMemoryQuestionRepository implements QuestionRepository {
     const question = this.items.find((item) => item.slug?.value === slug)
 
     return question ?? null
+  }
+
+  async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
+    const question = this.items.find((item) => item.slug?.value === slug)
+
+    if (!question) return null
+
+    const author = this.studentRepository.students.find((student) =>
+      student.id.equals(question.authorId)
+    )
+
+    if (!author) {
+      throw new Error(
+        `Author with id ${question.authorId.toString()} not found`
+      )
+    }
+
+    const questionAttachments = this.questionAttachmentRepository.items.filter(
+      ({ questionId }) => questionId.equals(question.id)
+    )
+
+    const attachments = questionAttachments.map((questionAttachment) => {
+      const attachment = this.attachmentRepository.items.find(({ id }) =>
+        id.equals(questionAttachment.attachmentId)
+      )
+
+      if (!attachment) {
+        throw new Error(
+          `Attachment with id ${questionAttachment.attachmentId.toString()} not found`
+        )
+      }
+
+      return attachment
+    })
+
+    return QuestionDetails.create({
+      questionId: question.id,
+      title: question.title,
+      content: question.content,
+      slug: question.slug,
+      authorId: question.authorId,
+      author: author.name,
+      attachments,
+      bestAnswerId: question.bestAnswerId,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt
+    })
   }
 
   async findById(questionId: string): Promise<Question | null> {

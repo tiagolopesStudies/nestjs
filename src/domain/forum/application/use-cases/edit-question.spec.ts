@@ -1,6 +1,8 @@
 import { makeQuestion } from 'test/factories/make-question'
+import { InMemoryAttachmentRepository } from 'test/repositories/in-memory-attachment-repository'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
 import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
 import { UniqueEntityId } from '../../enterprise/entities/value-objects/unique-entity-id'
@@ -15,7 +17,9 @@ describe('Edit question', () => {
     inMemoryQuestionAttachmentRepository =
       new InMemoryQuestionAttachmentRepository()
     inMemoryQuestionRepository = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachmentRepository
+      inMemoryQuestionAttachmentRepository,
+      new InMemoryAttachmentRepository(),
+      new InMemoryStudentRepository()
     )
     sut = new EditQuestionUseCase(
       inMemoryQuestionRepository,

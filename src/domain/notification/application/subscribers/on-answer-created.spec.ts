@@ -1,20 +1,21 @@
 import { makeAnswer } from 'test/factories/make-answer'
-import { OnAnswerCreated } from './on-answer-created'
-import { AnswerRepository } from '@/domain/forum/application/repositories/answer-repository'
-import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
-import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
-import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
-import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
-import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
-import { SendNotificationUseCase } from '../use-cases/send-notification'
-import { NotificationsRepository } from '../repositories/notifications-repository'
-import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
 import { makeQuestion } from 'test/factories/make-question'
+import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
+import { InMemoryAttachmentRepository } from 'test/repositories/in-memory-attachment-repository'
+import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
+import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
 import { MockInstance } from 'vitest'
+import { AnswerRepository } from '@/domain/forum/application/repositories/answer-repository'
+import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
+import { NotificationsRepository } from '../repositories/notifications-repository'
+import { SendNotificationUseCase } from '../use-cases/send-notification'
+import { OnAnswerCreated } from './on-answer-created'
 
 let answerRepository: AnswerRepository
 let questionRepository: QuestionRepository
-let questionAttachmentsRepository: QuestionAttachmentRepository
+let questionAttachmentsRepository: InMemoryQuestionAttachmentRepository
 let notificationsRepository: NotificationsRepository
 let sendNotification: SendNotificationUseCase
 let sendNotificationExecuteSpy: MockInstance
@@ -24,7 +25,9 @@ describe('On Answer Created', () => {
     answerRepository = new InMemoryAnswerRepository()
     questionAttachmentsRepository = new InMemoryQuestionAttachmentRepository()
     questionRepository = new InMemoryQuestionRepository(
-      questionAttachmentsRepository
+      questionAttachmentsRepository,
+      new InMemoryAttachmentRepository(),
+      new InMemoryStudentRepository()
     )
     notificationsRepository = new InMemoryNotificationsRepository()
     sendNotification = new SendNotificationUseCase(notificationsRepository)

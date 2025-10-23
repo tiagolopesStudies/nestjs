@@ -1,12 +1,14 @@
-import { makeQuestion } from 'test/factories/make-question'
-import { OnQuestionBestAnswerChosen } from './on-question-best-answer-chosen'
-import { SendNotificationUseCase } from '../use-cases/send-notification'
-import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
-import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
 import { makeAnswer } from 'test/factories/make-answer'
-import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
+import { makeQuestion } from 'test/factories/make-question'
+import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
+import { InMemoryAttachmentRepository } from 'test/repositories/in-memory-attachment-repository'
+import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
+import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
+import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-repository'
 import { MockInstance } from 'vitest'
+import { SendNotificationUseCase } from '../use-cases/send-notification'
+import { OnQuestionBestAnswerChosen } from './on-question-best-answer-chosen'
 
 let answerRepository: InMemoryAnswerRepository
 let questionRepository: InMemoryQuestionRepository
@@ -20,7 +22,9 @@ describe('OnQuestionBestAnswerChosen', () => {
     answerRepository = new InMemoryAnswerRepository()
     questionAttachmentsRepository = new InMemoryQuestionAttachmentRepository()
     questionRepository = new InMemoryQuestionRepository(
-      questionAttachmentsRepository
+      questionAttachmentsRepository,
+      new InMemoryAttachmentRepository(),
+      new InMemoryStudentRepository()
     )
     notificationsRepository = new InMemoryNotificationsRepository()
     sendNotification = new SendNotificationUseCase(notificationsRepository)

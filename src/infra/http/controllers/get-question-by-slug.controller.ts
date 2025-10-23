@@ -8,7 +8,7 @@ import {
 import z from 'zod'
 import { GetQuestionBySlugUseCase } from '@/domain/forum/application/use-cases/get-question-by-slug'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { QuestionPresenter } from '../presenters/question-presenter'
+import { QuestionDetailsPresenter } from '../presenters/question-details-presenter'
 
 const slugParamSchema = z.object({
   slug: z.string().min(1)
@@ -35,7 +35,7 @@ export class GetQuestionBySlugController {
     const { question } = result.value
 
     return {
-      question: QuestionPresenter.toHTTP(question)
+      question: QuestionDetailsPresenter.toHTTP(question)
     }
   }
 }

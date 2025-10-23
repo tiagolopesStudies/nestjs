@@ -1,6 +1,7 @@
 import { makeQuestion } from 'test/factories/make-question'
 import { makeQuestionComment } from 'test/factories/make-question-comment'
 import { makeStudent } from 'test/factories/make-student'
+import { InMemoryAttachmentRepository } from 'test/repositories/in-memory-attachment-repository'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
 import { InMemoryQuestionCommentRepository } from 'test/repositories/in-memory-question-comment-repository'
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository'
@@ -16,7 +17,9 @@ let studentRepository: InMemoryStudentRepository
 describe('Comment on question', () => {
   beforeEach(() => {
     questionRepository = new InMemoryQuestionRepository(
-      new InMemoryQuestionAttachmentRepository()
+      new InMemoryQuestionAttachmentRepository(),
+      new InMemoryAttachmentRepository(),
+      new InMemoryStudentRepository()
     )
     studentRepository = new InMemoryStudentRepository()
     questionCommentsRepository = new InMemoryQuestionCommentRepository(
