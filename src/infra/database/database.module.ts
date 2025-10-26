@@ -7,11 +7,13 @@ import { QuestionAttachmentRepository } from '@/domain/forum/application/reposit
 import { QuestionCommentRepository } from '@/domain/forum/application/repositories/question-comment-repository'
 import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
 import { StudentRepository } from '@/domain/forum/application/repositories/student-repository'
+import { NotificationsRepository } from '@/domain/notification/application/repositories/notifications-repository'
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaAnswerAttachmentRepository } from './prisma/repositories/prisma-answer-attachment-repository'
 import { PrismaAnswerCommentRepository } from './prisma/repositories/prisma-answer-comment-repository'
 import { PrismaAnswerRepository } from './prisma/repositories/prisma-answer-repository'
 import { PrismaAttachmentRepository } from './prisma/repositories/prisma-attachment-repository'
+import { PrismaNotificationRepository } from './prisma/repositories/prisma-notification-repository'
 import { PrismaQuestionAttachmentRepository } from './prisma/repositories/prisma-question-attachment-repository'
 import { PrismaQuestionCommentRepository } from './prisma/repositories/prisma-question-comment-repository'
 import { PrismaQuestionRepository } from './prisma/repositories/prisma-question-repository'
@@ -51,6 +53,10 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
     {
       provide: AnswerAttachmentRepository,
       useClass: PrismaAnswerAttachmentRepository
+    },
+    {
+      provide: NotificationsRepository,
+      useClass: PrismaNotificationRepository
     }
   ],
   exports: [
@@ -62,7 +68,8 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
     QuestionCommentRepository,
     AnswerCommentRepository,
     AttachmentRepository,
-    AnswerAttachmentRepository
+    AnswerAttachmentRepository,
+    NotificationsRepository
   ]
 })
 export class DatabaseModule {}

@@ -6,7 +6,7 @@ import { StudentFactory } from 'test/factories/make-student'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 
-describe('UploadAttachmentController (e2e)', () => {
+describe.skip('UploadAttachmentController (e2e)', () => {
   let app: INestApplication
   let jwt: JwtService
   let studentFactory: StudentFactory

@@ -6,7 +6,7 @@ import { PrismaClient } from '../generated/prisma'
 config({ path: '.env', override: true })
 config({ path: '.env.test', override: true })
 
-const prisma = new PrismaClient()
+let prisma: PrismaClient
 
 function generateUniqueDatabaseUrl(schemaId: string) {
   if (!process.env.DATABASE_URL) {
@@ -26,13 +26,15 @@ beforeAll(async () => {
   process.env.DATABASE_URL = databaseUrl
 
   try {
-    execSync('pnpm prisma migrate deploy', {
+    execSync('pnpm prisma db push --skip-generate', {
       stdio: 'inherit',
       env: {
         ...process.env,
         DATABASE_URL: databaseUrl
       }
     })
+
+    prisma = new PrismaClient()
   } catch (error) {
     console.error('Erro ao executar migrações:', error)
     throw error
