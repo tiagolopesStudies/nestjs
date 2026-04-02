@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:3000
+
+### Cria um usuário
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Tiago Lopes",
+  "email": "teste@gmail.com",
+  "password": "123456"
+}
+
+### Busca todos os usuários
+GET {{baseUrl}}/users
+
+### Busca por id
+GET {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
+
+### Atualiza um usuário
+PUT {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
+Content-Type: application/json
+
+{
+  "name": "Tiago Tavares Lopes",
+  "email": "teste@gmail.com",
+  "password": "123456"
+}
+
+### Deleta um usuário
+DELETE {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
