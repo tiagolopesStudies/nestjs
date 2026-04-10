@@ -1,6 +1,8 @@
 @baseUrl = http://localhost:3000
+@userId = {{list_users.response.body.users[0].id}}
 
 ### Cria um usuário
+# @name create_user
 POST {{baseUrl}}/users
 Content-Type: application/json
 
@@ -11,13 +13,16 @@ Content-Type: application/json
 }
 
 ### Busca todos os usuários
+# @name list_users
 GET {{baseUrl}}/users
 
 ### Busca por id
-GET {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
+# @name get_user_by_id
+GET {{baseUrl}}/users/{{userId}}
 
 ### Atualiza um usuário
-PUT {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
+# @name update_user
+PUT {{baseUrl}}/users/{{userId}}
 Content-Type: application/json
 
 {
@@ -27,4 +32,5 @@ Content-Type: application/json
 }
 
 ### Deleta um usuário
-DELETE {{baseUrl}}/users/4b35eb90-5b5b-43ae-9ffa-fb0d0d547087
+# @name delete_user
+DELETE {{baseUrl}}/users/{{userId}}

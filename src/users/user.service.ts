@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 export interface User {
   id: string;
@@ -7,8 +9,6 @@ export interface User {
   email: string;
   password: string;
 }
-
-export type CreateOrUpdateUserBody = Omit<User, 'id'>;
 
 @Injectable()
 export class UserService {
@@ -18,10 +18,10 @@ export class UserService {
     this.users = [];
   }
 
-  create(user: CreateOrUpdateUserBody) {
+  create(data: CreateUserDto) {
     this.users.push({
       id: randomUUID(),
-      ...user,
+      ...data,
     });
   }
 
@@ -39,7 +39,7 @@ export class UserService {
     return user;
   }
 
-  update(id: string, user: CreateOrUpdateUserBody) {
+  update(id: string, user: UpdateUserDto) {
     const userIndex = this.users.findIndex((u) => u.id === id);
 
     if (userIndex === -1) {
