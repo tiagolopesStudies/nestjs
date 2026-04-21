@@ -18,8 +18,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() body: CreateUserDto) {
-    this.userService.create(body);
+  async create(@Body() body: CreateUserDto) {
+    await this.userService.create(body);
 
     return {
       message: 'created!',
@@ -27,8 +27,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    const users = this.userService.findAll();
+  async findAll() {
+    const users = await this.userService.findAll();
 
     return {
       users,
@@ -36,8 +36,8 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const user = this.userService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findOne(id);
 
     return {
       user,
@@ -46,13 +46,13 @@ export class UserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  update(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    this.userService.update(id, body);
+  async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    await this.userService.update(id, body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string) {
-    this.userService.delete(id);
+  async delete(@Param('id') id: string) {
+    await this.userService.delete(id);
   }
 }
