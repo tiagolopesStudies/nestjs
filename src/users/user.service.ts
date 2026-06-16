@@ -13,18 +13,16 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserDto) {
-    const result = await this.userRepository.insert({
+    await this.userRepository.insert({
       ...data,
     });
-
-    console.log(result);
   }
 
   findAll() {
     return this.userRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
@@ -34,13 +32,13 @@ export class UserService {
     return user;
   }
 
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: number, data: UpdateUserDto) {
     await this.userRepository.update(id, {
       ...data,
     });
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     await this.findOne(id);
 
     await this.userRepository.delete(id);

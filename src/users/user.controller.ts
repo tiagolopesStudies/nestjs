@@ -37,7 +37,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const user = await this.userService.findOne(id);
+    const user = await this.userService.findOne(Number(id));
 
     return {
       user,
@@ -47,12 +47,12 @@ export class UserController {
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    await this.userService.update(id, body);
+    await this.userService.update(Number(id), body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
-    await this.userService.delete(id);
+    await this.userService.delete(Number(id));
   }
 }

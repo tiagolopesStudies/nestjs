@@ -1,5 +1,42 @@
 @baseUrl = http://localhost:3000
+@messageId = {{list_messages.response.body.messages[0].id}}
 @userId = {{list_users.response.body.users[0].id}}
+
+### Cria uma mensagem
+# @name create_message
+POST {{baseUrl}}/messages
+Content-Type: application/json
+
+{
+  "text": "Mensagem aqui",
+  "from": "Tiago Lopes",
+  "to": "Joana",
+  "read": true
+}
+
+### Busca todas as mensagens
+# @name list_messages
+GET {{baseUrl}}/messages
+
+### Busca mensagem por id
+# @name get_message_by_id
+GET {{baseUrl}}/messages/{{messageId}}
+
+### Atualiza uma mensagem
+# @name update_message
+PUT {{baseUrl}}/messages/{{messageId}}
+Content-Type: application/json
+
+{
+  "text": "Mensagem aqui",
+  "from": "Tiago Lopes",
+  "to": "Joana Santos",
+  "read": true
+}
+
+### Deleta uma mensagem
+# @name delete_message
+DELETE {{baseUrl}}/messages/{{messageId}}
 
 ### Cria um usuário
 # @name create_user
