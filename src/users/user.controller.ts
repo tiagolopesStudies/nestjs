@@ -19,10 +19,10 @@ export class UserController {
 
   @Post()
   async create(@Body() body: CreateUserDto) {
-    await this.userService.create(body);
+    const user = await this.userService.create(body);
 
     return {
-      message: 'created!',
+      data: user,
     };
   }
 
@@ -37,7 +37,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const user = await this.userService.findOne(Number(id));
+    const user = await this.userService.getById(Number(id));
 
     return {
       user,
