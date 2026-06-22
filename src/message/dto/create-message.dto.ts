@@ -1,12 +1,15 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class CreateMessageDto {
   @IsString()
   public readonly text: string;
-  @IsString()
-  public readonly from: string;
-  @IsString()
-  public readonly to: string;
+
+  @IsPositive()
+  public readonly fromId: number;
+
+  @IsPositive()
+  public readonly toId: number;
+
   @IsBoolean()
   @IsOptional()
   public readonly read?: boolean;

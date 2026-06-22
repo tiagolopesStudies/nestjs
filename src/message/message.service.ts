@@ -4,19 +4,26 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
+import { UserService } from '@/users/user.service';
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
+    private readonly userService: UserService,
   ) {}
 
   async create(createMessageDto: CreateMessageDto) {
+    const [userFrom, userTo] = await Promise.all([
+      this.userService.getById(createMessageDto.fromId),
+      this.userService.getById(createMessageDto.toId),
+    ]);
+
     const message = this.messageRepository.create({
       text: createMessageDto.text,
-      from: createMessageDto.from,
-      to: createMessageDto.to,
+      from: userFrom,
+      to: userTo,
       read: createMessageDto.read ?? false,
     });
 
@@ -40,10 +47,19 @@ export class MessageService {
   }
 
   async update(id: number, updateMessageDto: UpdateMessageDto) {
+    const [userFrom, userTo] = await Promise.all([
+      updateMessageDto.fromId
+        ? this.userService.getById(updateMessageDto.fromId)
+        : undefined,
+      updateMessageDto.toId
+        ? this.userService.getById(updateMessageDto.toId)
+        : undefined,
+    ]);
+
     await this.messageRepository.update(id, {
       text: updateMessageDto.text,
-      from: updateMessageDto.from,
-      to: updateMessageDto.to,
+      from: userFrom,
+      to: userTo,
       read: updateMessageDto.read ?? false,
     });
   }
