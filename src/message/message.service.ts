@@ -32,18 +32,45 @@ export class MessageService {
     return message;
   }
 
-  findAll() {
-    return this.messageRepository.find();
+  async findAll() {
+    const messages = await this.messageRepository.find({
+      relations: ['from', 'to'],
+    });
+
+    return messages.map((message) => ({
+      ...message,
+      from: {
+        id: message.from.id,
+        name: message.from.name,
+      },
+      to: {
+        id: message.to.id,
+        name: message.to.name,
+      },
+    }));
   }
 
   async findOne(id: number) {
-    const message = await this.messageRepository.findOneBy({ id });
+    const message = await this.messageRepository.findOne({
+      where: { id },
+      relations: ['from', 'to'],
+    });
 
     if (!message) {
       throw new NotFoundException('Message not found!');
     }
 
-    return message;
+    return {
+      ...message,
+      from: {
+        id: message.from.id,
+        name: message.from.name,
+      },
+      to: {
+        id: message.to.id,
+        name: message.to.name,
+      },
+    };
   }
 
   async update(id: number, updateMessageDto: UpdateMessageDto) {
