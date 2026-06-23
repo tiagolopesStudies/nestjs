@@ -8,10 +8,12 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Controller('messages')
 export class MessageController {
@@ -23,8 +25,8 @@ export class MessageController {
   }
 
   @Get()
-  async findAll() {
-    const messages = await this.messageService.findAll();
+  async findAll(@Query() { limit, offset }: PaginationDto) {
+    const messages = await this.messageService.findAll({ limit, offset });
 
     return {
       messages,

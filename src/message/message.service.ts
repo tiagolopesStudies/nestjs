@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
 import { UserService } from '@/users/user.service';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class MessageService {
@@ -32,9 +33,11 @@ export class MessageService {
     return message;
   }
 
-  async findAll() {
+  async findAll({ limit, offset }: PaginationDto) {
     const messages = await this.messageRepository.find({
       relations: ['from', 'to'],
+      skip: offset,
+      take: limit,
     });
 
     return messages.map((message) => ({

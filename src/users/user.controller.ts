@@ -8,10 +8,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Controller('users')
 export class UserController {
@@ -27,8 +29,8 @@ export class UserController {
   }
 
   @Get()
-  async findAll() {
-    const users = await this.userService.findAll();
+  async findAll(@Query() { limit, offset }: PaginationDto) {
+    const users = await this.userService.findAll({ limit, offset });
 
     return {
       users,

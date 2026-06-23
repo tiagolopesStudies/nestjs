@@ -8,6 +8,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class UserService {
@@ -34,8 +35,12 @@ export class UserService {
     return user;
   }
 
-  findAll() {
-    return this.userRepository.find({ order: { id: 'DESC' } });
+  findAll({ limit, offset }: PaginationDto) {
+    return this.userRepository.find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: limit,
+    });
   }
 
   findByEmail(email: string) {
@@ -46,7 +51,7 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException(`User with id '${id}' not found.`);
     }
 
     return user;
